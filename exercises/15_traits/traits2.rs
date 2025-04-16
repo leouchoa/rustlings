@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 trait AppendBar {
     fn append_bar(self) -> Self;
 }
@@ -5,6 +7,13 @@ trait AppendBar {
 // TODO: Implement the trait `AppendBar` for a vector of strings.
 // `append_bar` should push the string "Bar" into the vector.
 
+impl AppendBar for Vec<String> {
+    // TODO: Implement `AppendBar` for the type `String`.
+    fn append_bar(mut self) -> Self {
+        self.push(String::from_str("Bar").expect("idk man"));
+        self
+    }
+}
 fn main() {
     // You can optionally experiment here.
 }
