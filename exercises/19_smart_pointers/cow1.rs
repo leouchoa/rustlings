@@ -3,6 +3,14 @@
 // lazily when mutation or ownership is required. The type is designed to work
 // with general borrowed data via the `Borrow` trait.
 
+// NOTE: `abs_all` works for both arrays and vectors. Why?
+// The reason the type-checking system doesn't need a distinction between arrays
+// and vectors in this case is that arrays and vectors are both treated as slices
+// ([T]) when passed to Cow. This is because arrays in Rust, despite being
+// fixed-size, can be treated as slices (&[T]), which is the core functionality
+// that Cow needs. Also the Cow<[T]> type is generic and works with any type
+// that implements the ToOwned and Borrow traits (Trait Bound).
+
 use std::borrow::Cow;
 
 fn abs_all(input: &mut Cow<[i32]>) {
@@ -39,7 +47,7 @@ mod tests {
         let mut input = Cow::from(&vec);
         abs_all(&mut input);
         // TODO: Replace `todo!()` with `Cow::Owned(_)` or `Cow::Borrowed(_)`.
-        assert!(matches!(input, todo!()));
+        assert!(matches!(input, Cow::Borrowed(_)));
     }
 
     #[test]
@@ -52,7 +60,7 @@ mod tests {
         let mut input = Cow::from(vec);
         abs_all(&mut input);
         // TODO: Replace `todo!()` with `Cow::Owned(_)` or `Cow::Borrowed(_)`.
-        assert!(matches!(input, todo!()));
+        assert!(matches!(input, Cow::Owned(_)));
     }
 
     #[test]
@@ -64,6 +72,6 @@ mod tests {
         let mut input = Cow::from(vec);
         abs_all(&mut input);
         // TODO: Replace `todo!()` with `Cow::Owned(_)` or `Cow::Borrowed(_)`.
-        assert!(matches!(input, todo!()));
+        assert!(matches!(input, Cow::Owned(_)));
     }
 }
