@@ -4,7 +4,7 @@
 // number of exercises with a given progress. Recreate this counting
 // functionality using iterators. Try to not use imperative loops (for/while).
 
-use std::collections::HashMap;
+use std::{collections::HashMap, usize};
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Progress {
@@ -28,6 +28,13 @@ fn count_for(map: &HashMap<String, Progress>, value: Progress) -> usize {
 fn count_iterator(map: &HashMap<String, Progress>, value: Progress) -> usize {
     // `map` is a hash map with `String` keys and `Progress` values.
     // map = { "variables1": Complete, "from_str": None, … }
+    let mut count: usize = 0;
+    map.iter().for_each(|(_, &val)| {
+        if val == value {
+            count += 1
+        }
+    });
+    count
 }
 
 fn count_collection_for(collection: &[HashMap<String, Progress>], value: Progress) -> usize {
@@ -48,6 +55,11 @@ fn count_collection_iterator(collection: &[HashMap<String, Progress>], value: Pr
     // `collection` is a slice of hash maps.
     // collection = [{ "variables1": Complete, "from_str": None, … },
     //               { "variables2": Complete, … }, … ]
+    let mut count: usize = 0;
+    collection
+        .iter()
+        .for_each(|hashmap| count += count_iterator(hashmap, value));
+    count
 }
 
 fn main() {
